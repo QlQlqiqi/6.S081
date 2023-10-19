@@ -242,6 +242,7 @@ iupdate(struct inode *ip)
 static struct inode*
 iget(uint dev, uint inum)
 {
+  // printf("iget: %d %d\n", dev, inum);
   struct inode *ip, *empty;
 
   acquire(&itable.lock);
@@ -529,6 +530,7 @@ namecmp(const char *s, const char *t)
 struct inode*
 dirlookup(struct inode *dp, char *name, uint *poff)
 {
+  // printf("dirlookup\n");
   uint off, inum;
   struct dirent de;
 
@@ -540,6 +542,7 @@ dirlookup(struct inode *dp, char *name, uint *poff)
       panic("dirlookup read");
     if(de.inum == 0)
       continue;
+    // printf("%s %s\n",name,de.name);
     if(namecmp(name, de.name) == 0){
       // entry matches path element
       if(poff)
@@ -629,13 +632,14 @@ static struct inode*
 namex(char *path, int nameiparent, char *name)
 {
   struct inode *ip, *next;
-
+  // printf("is root %d\n", *path == '/');
   if(*path == '/')
     ip = iget(ROOTDEV, ROOTINO);
   else
     ip = idup(myproc()->cwd);
 
   while((path = skipelem(path, name)) != 0){
+    // printf("namex loop: ip->type: %d", ip->type);
     ilock(ip);
     if(ip->type != T_DIR){
       iunlockput(ip);
