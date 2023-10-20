@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     close(fds1[1]);
     close(fds2[0]);
     close(fds2[1]);
-    printf("<%d>: received ping\n", getpid());
+    printf("%d: received ping\n", getpid());
   }
   else
   {
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     close(fds1[1]);
     close(fds2[0]);
     close(fds2[1]);
-    printf("<%d>: received pong\n", getpid());
+    printf("%d: received pong\n", getpid());
   }
 
   exit(0);
