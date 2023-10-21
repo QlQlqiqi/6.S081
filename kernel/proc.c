@@ -303,6 +303,9 @@ fork(void)
 
   safestrcpy(np->name, p->name, sizeof(p->name));
 
+  // child process should remain trace mask
+  np->trace_mask = p->trace_mask;
+
   pid = np->pid;
 
   release(&np->lock);
@@ -653,4 +656,14 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+// return process count
+uint64
+get_proc_count() {
+  uint64 num = 0;
+  for(int i = 0; i < NPROC; i++) {
+    num += (proc[i].state != UNUSED);
+  }
+  return num;
 }
